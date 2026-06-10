@@ -1,0 +1,55 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset
+df = pd.read_csv("web_traffic.csv")
+
+# Display basic information
+print(df.head())
+print(df.info())
+
+# Total page views
+print("Total Page Views:", df["PageViews"].sum())
+
+# Average session duration
+print("Average Session Duration:", df["SessionDuration"].mean())
+
+# Most visited pages
+top_pages = df["Page"].value_counts().head(10)
+print("\nTop Pages:")
+print(top_pages)
+
+# Page views chart
+plt.figure(figsize=(8,5))
+top_pages.plot(kind="bar")
+plt.title("Top Visited Pages")
+plt.ylabel("Visits")
+plt.show()
+
+# Session duration distribution
+plt.figure(figsize=(8,5))
+sns.histplot(df["SessionDuration"], bins=20)
+plt.title("Session Duration Distribution")
+plt.show()
+
+# Drop-off analysis
+drop_off = df["ExitPage"].value_counts().head(10)
+
+plt.figure(figsize=(8,5))
+drop_off.plot(kind="bar")
+plt.title("Top Drop-off Pages")
+plt.ylabel("Exits")
+plt.show()
+
+# User journey analysis
+journey = df.groupby(["LandingPage", "ExitPage"]).size().sort_values(ascending=False)
+print("\nCommon User Journeys:")
+print(journey.head(10))
+
+# Insights
+print("\nInsights:")
+print("- Pages with the highest views attract the most traffic.")
+print("- Pages with high exits may need content or design improvements.")
+print("- Longer session durations generally indicate better engagement.")
+print("- User journey analysis helps identify navigation patterns.")
